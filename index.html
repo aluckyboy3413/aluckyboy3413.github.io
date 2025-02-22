@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FADOUA & JIANWEI 的爱情空间</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/parallax/3.1.0/parallax.min.js"></script>
+    <style>
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .pickup-section {
+            position: relative;
+            margin: 3rem auto;
+            max-width: 600px;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 4px 30px rgba(255, 107, 139, 0.2);
+        }
+
+        .pickup-card {
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        #pickupLine {
+            font-size: 1.2rem;
+            color: #ff4d4d;
+            text-align: center;
+            line-height: 1.6;
+            margin: 1rem 0;
+        }
+
+        .refresh-btn {
+            background: #ff6b8b;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="heartCanvas"></canvas>
+    <!-- 浮动爱心容器 -->
+    <div class="floating-hearts"></div>
+    <!-- 视差效果背景 -->
+    <div id="scene" class="parallax-scene">
+        <div data-depth="0.2" class="parallax-layer">
+            <svg class="vector-heart" viewBox="0 0 24 24" style="--color: #ff6b8b">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <svg class="vector-heart" viewBox="0 0 24 24" style="--color: #ff8da8">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <svg class="vector-heart" viewBox="0 0 24 24" style="--color: #ffd1dc">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+        </div>
+        <div data-depth="0.4" class="parallax-layer">
+            <svg class="vector-heart" viewBox="0 0 24 24" style="--color: #ff6b6b">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <svg class="vector-heart" viewBox="0 0 24 24" style="--color: #ff9999">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+        </div>
+        <div data-depth="0.6" class="parallax-layer">
+            <svg class="vector-heart" viewBox="0 0 24 24" style="--color: #ff4d4d">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <svg class="vector-heart" viewBox="0 0 24 24" style="--color: #ff3333">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+        </div>
+    </div>
+
+    <div class="floating-hearts">
+        <!-- 装饰性爱心将通过JavaScript动态添加 -->
+    </div>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+        <audio id="bgMusic" loop preload="auto" autoplay type="audio/mpeg">
+            <source src="music/love-song.mp3" type="audio/mpeg" />
+            Your browser does not support the audio element.
+        </audio>
+        <button id="musicToggle" class="music-toggle" title="Play/Pause Music">
+            <span class="music-note">♪</span>
+        </button>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>FADOUA ❤️ JIANWEI</h1>
+            <p>Our sweet story continues every day</p>
+        </header>
+
+        <!-- 恋爱计时器 -->
+        <section class="countdown">
+            <h2>Time Together</h2>
+            <div class="timer">
+                <div class="timer-item">
+                    <div id="days">0</div>
+                    <div>Days</div>
+                </div>
+                <div class="timer-item">
+                    <div id="hours">0</div>
+                    <div>Hours</div>
+                </div>
+                <div class="timer-item">
+                    <div id="minutes">0</div>
+                    <div>Minutes</div>
+                </div>
+                <div class="timer-item">
+                    <div id="seconds">0</div>
+                    <div>Seconds</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 重要时刻 -->
+        <section class="milestones">
+            <h2>Our Special Moments</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="date">2024-04-28</div>
+                    <div class="content">
+                        <h3>First Connection</h3>
+                        <p>Added WhatsApp contact</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date">2024-07-31</div>
+                    <div class="content">
+                        <h3>Love Confession</h3>
+                        <p>The day our sweet story officially began</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date">2024-10-29</div>
+                    <div class="content">
+                        <h3>First Photo Exchange</h3>
+                        <p>Sharing our first pictures with each other</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="date">2024-11-18</div>
+                    <div class="content">
+                        <h3>First Voice Message</h3>
+                        <p>Fadoua's first voice message</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 电影记录 -->
+        <section class="movie-container">
+            <button class="toggle-btn" onclick="toggleList('movieList')">🎬 Movies We Watched Together</button>
+            <div class="movie-list" id="movieList">
+                <div class="movie-item">
+                    <span class="movie-date">2024.8.15</span>
+                    <div>
+                        <h3>❶ You are the apple of my eye</h3>
+                        <p>那些年我们一起追的女孩</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.8.27</span>
+                    <div>
+                        <h3>❷ The notebook</h3>
+                        <p>恋恋笔记本</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.9.4</span>
+                    <div>
+                        <h3>❸ Hello,Mr. Billionaire</h3>
+                        <p>西虹市首富</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.9.6</span>
+                    <div>
+                        <h3>❹ 18×2 beyond youthful days</h3>
+                        <p>错过你的那些年</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.9.9</span>
+                    <div>
+                        <h3>❺ 500 days of summer</h3>
+                        <p>和莎莫的五百天</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.9.19</span>
+                    <div>
+                        <h3>❻ Gold or shit</h3>
+                        <p>走走停停</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.9.19</span>
+                    <div>
+                        <h3>❼ White snake</h3>
+                        <p>白蛇</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.9.20</span>
+                    <div>
+                        <h3>❽ 10 things I hate about you</h3>
+                        <p>我恨你的10件事</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.9.26</span>
+                    <div>
+                        <h3>❾ Good bye Mr loser</h3>
+                        <p>夏洛特烦恼</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.12.11</span>
+                    <div>
+                        <h3>❿ Wandering earth 1</h3>
+                        <p>流浪地球1</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2024.12.20</span>
+                    <div>
+                        <h3>⓫ Wandering earth 2</h3>
+                        <p>流浪地球2</p>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <span class="movie-date">2025.2.8</span>
+                    <div>
+                        <h3>⓬ Nezha 1</h3>
+                        <p>哪吒1</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 未来计划 -->
+        <section class="movie-container">
+            <button class="toggle-btn" onclick="toggleList('planList')">💝 I will take Fadoua</button>
+            <div class="movie-list" id="planList">
+                <div class="movie-item">
+                    <div>
+                        <h3>❶ Try hot pot</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❷ Try jiaozi</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❸ Give her a beautiful hairpin</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❹ Night walk at park</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❺ Go to the beach</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❻ Climb ZhangJiajie mountain</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❼ Shopping with her in the mall</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❽ IKEA date</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❾ Private cinema date</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>❿ English singer concert</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓫ Luxury buffet dinner</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓬ Try hbaf nut</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓭ Aquarium date</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓮ Visit pandas at the zoo</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓯ Cruise ship travel</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓰ Clay making date</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓱ Internet cafe date</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓲ Beach restaurant dinner</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓳ Watch drone light show</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>⓴ Cuddling together</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉑ Compare hand sizes</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉒ Watch firework show</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉓ Watch sunrise together</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉔ Sweet kisses</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉕ Escape room adventure</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉖ Feed her bubble tea</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉗ Share sweet moments</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉘ Romantic evening date</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉙ Sweet hugs</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉚ Night beach walk</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉛ Romantic moments</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉜ Watch TikTok together</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉝ Star gazing</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉞ Go kart racing</h3>
+                    </div>
+                </div>
+                <div class="movie-item">
+                    <div>
+                        <h3>㉟ Morning kisses</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pick-up Lines -->
+        <section class="pickup-section">
+            <h2>Daily Sweet Words</h2>
+            <div class="pickup-card">
+                <p id="pickupLine">点击获取今日情话</p>
+                <button class="refresh-btn" onclick="generatePickupLine()">
+                    <span>🔄</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 留言板 -->
+        <section class="message-board">
+            <h2>Message Board</h2>
+            <div class="message-form">
+                <textarea placeholder="Write your message here..." rows="4"></textarea>
+                <button type="submit">Send Message</button>
+            </div>
+            <div id="messages"></div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Canvas 爱心特效
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        let ww = canvas.width = window.innerWidth;
+        let wh = canvas.height = window.innerHeight;
+
+        function randomColor() {
+            return `hsla(${Math.random() * 360}, 100%, 60%, 1)`;
+        }
+
+        class Heart {
+            constructor(x, y) {
+                this.x = x || Math.random() * ww;
+                this.y = y || Math.random() * wh;
+                this.size = Math.random() * 1 + 0.5;
+                this.shadowBlur = Math.random() * 20;
+                this.speedX = (Math.random() - 0.5) * 10;
+                this.speedY = (Math.random() - 0.5) * 10;
+                this.speedSize = Math.random() * 0.05 + 0.01;
+                this.opacity = 1;
+                this.color = 'hsla(340, 100%, 70%, 1)';
+                this.vertices = [];
+                for (let i = 0; i < 100; i++) {
+                    const step = (i / 100 - 0.5) * Math.PI * 2;
+                    const vector = {
+                        x: 15 * Math.pow(Math.sin(step), 3),
+                        y: -(13 * Math.cos(step) - 5 * Math.cos(2 * step) - 2 * Math.cos(3 * step) - Math.cos(4 * step))
+                    };
+                    this.vertices.push(vector);
+                }
+            }
+
+            draw() {
+                this.size -= this.speedSize;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.scale(this.size, this.size);
+                ctx.beginPath();
+                ctx.strokeStyle = this.color;
+                ctx.shadowBlur = this.shadowBlur;
+                ctx.shadowColor = this.color;
+                for (const vector of this.vertices) {
+                    ctx.lineTo(vector.x, vector.y);
+                }
+                ctx.globalAlpha = this.opacity;
+                ctx.closePath();
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        let hearts = [];
+
+        function render() {
+            requestAnimationFrame(render);
+            ctx.clearRect(0, 0, ww, wh);
+            for (let i = 0; i < hearts.length; i++) {
+                hearts[i].draw();
+                if (hearts[i].size <= 0) {
+                    hearts.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function onClick(e) {
+            let x = e.clientX;
+            let y = e.clientY;
+            for (let i = 0; i < 20; i++) {
+                hearts.push(new Heart(x, y));
+            }
+        }
+
+        function onMove(e) {
+            for (let i = 0; i < 5; i++) {
+                let x, y;
+                if (e.type === "touchmove") {
+                    x = e.touches[0].clientX;
+                    y = e.touches[0].clientY;
+                } else {
+                    x = e.clientX;
+                    y = e.clientY;
+                }
+                hearts.push(new Heart(x, y));
+            }
+        }
+
+        window.addEventListener("mousemove", onMove);
+        window.addEventListener("touchmove", onMove);
+        window.addEventListener("click", onClick);
+        window.addEventListener("resize", () => {
+            ww = canvas.width = window.innerWidth;
+            wh = canvas.height = window.innerHeight;
+        });
+
+        requestAnimationFrame(render);
+    </script>
+    <!-- 计时器 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const startDate = new Date('2024-07-31T00:00:00');
+            
+            function updateTimer() {
+                const now = new Date();
+                const diff = now - startDate;
+                
+                // 处理未来日期的情况
+                if (diff < 0) {
+                    document.getElementById('days').innerText = '0';
+                    document.getElementById('hours').innerText = '0';
+                    document.getElementById('minutes').innerText = '0';
+                    document.getElementById('seconds').innerText = '0';
+                    return;
+                }
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours;
+                document.getElementById('minutes').innerText = minutes;
+                document.getElementById('seconds').innerText = seconds;
+            }
+            
+            // 立即更新一次
+            updateTimer();
+            // 每秒更新一次
+            setInterval(updateTimer, 1000);
+        });
+    </script>
+    <script>
+        // Pick-up Lines 数据
+        const pickupLines = [
+            "Are you a magician? Because whenever I look at you, everyone else disappears!",
+            "If you were a vegetable, you'd be a cute-cumber!",
+            "Are you a camera? Because every time I look at you, I smile!",
+            "Do you like science? Because we've got some chemistry!",
+            "Are you a dictionary? Because you add meaning to my life!",
+            "Is your name Google? Because you've got everything I've been searching for!",
+            "Are you a parking ticket? Because you've got FINE written all over you!",
+            "Do you like math? Because I can add love, subtract hate, multiply joy and divide distance between us!",
+            "If you were a fruit, you'd be a fine-apple!",
+            "Are you WiFi? Because I'm feeling a connection!",
+            "Is your name Spotify? Because you're the hottest single around!",
+            "Are you a bank loan? Because you've got my interest!"
+        ];
+
+        let currentPickupIndex = 0;
+
+        function generatePickupLine() {
+            const pickupLineElement = document.getElementById('pickupLine');
+            currentPickupIndex = (currentPickupIndex + 1) % pickupLines.length;
+            pickupLineElement.textContent = pickupLines[currentPickupIndex];
+            
+            // 添加动画效果
+            pickupLineElement.style.opacity = '0';
+            setTimeout(() => {
+                pickupLineElement.style.opacity = '1';
+                pickupLineElement.style.transition = 'opacity 0.5s ease-in-out';
+            }, 100);
+        }
+
+        // 自动更新 Pick-up Line
+        setInterval(generatePickupLine, 30000); // 每30秒更新一次
+        generatePickupLine(); // 初始化显示
+    </script>
+    <script>
+        document.querySelector('.message-form button').addEventListener('click', function() {
+            addMessage();
+        });
+
+        document.querySelector('.message-form textarea').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // 防止换行
+                addMessage();
+            }
+        });
+
+        function addMessage() {
+            const textarea = document.querySelector('.message-form textarea');
+            const message = textarea.value.trim();
+            if (message) {
+                const timestamp = new Date().toLocaleString();
+                const messageDiv = document.createElement('div');
+                messageDiv.textContent = `${timestamp} - ${message}`;
+                document.getElementById('messages').appendChild(messageDiv);
+                textarea.value = ''; // 清空输入框
+            }
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('bgMusic');
+            const musicToggle = document.getElementById('musicToggle');
+            
+            // 尝试自动播放
+            audio.play().catch(function(error) {
+                console.log('自动播放被阻止:', error);
+            });
+
+            // 点击按钮切换播放状态
+            musicToggle.addEventListener('click', function() {
+                if (audio.paused) {
+                    audio.play();
+                    musicToggle.classList.add('playing');
+                } else {
+                    audio.pause();
+                    musicToggle.classList.remove('playing');
+                }
+            });
+
+            // 监听页面可见性变化
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    audio.pause();
+                } else {
+                    audio.play().catch(function(error) {
+                        console.log('播放失败:', error);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
