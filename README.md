@@ -24,4 +24,4 @@
 3. 在仓库设置中启用 GitHub Pages。
 4. 选择 `main` 分支作为源。
 
-访问 `https://<你的用户名>.github.io/<仓库名>/` 来查看你的网站。
+访问 `https://<aluckyboy3413>.github.io/<sluckyboy3413>/` 来查看你的网站。
